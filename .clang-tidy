@@ -1,0 +1,4 @@
+---
+Checks: '-*,clang-diagnostic-*,-clang-diagnostic-non-pod-varargs,-clang-diagnostic-error,clang-analyzer-*,bugprone-*,-bugprone-easily-swappable-parameters,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-simplify-boolean-expr,-readability-function-cognitive-complexity'
+HeaderFilterRegex: ''
+WarningsAsErrors: '*'

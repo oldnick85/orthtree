@@ -1,0 +1,5 @@
+.vscode
+/build
+/external
+/out
+settings.json
