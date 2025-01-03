@@ -150,6 +150,13 @@ class Node
     Node(const Box_t& area, const uint level) : m_area(area), m_level(level) {}
     ~Node() { delete m_sub_nodes; }
 
+    void Clear()
+    {
+        m_bucket.clear();
+        delete m_sub_nodes;
+        m_sub_nodes = nullptr;
+    }
+
     void Add(TValue val, const Box_t& box)
     {
         if (NODES_SHARE_VAL)

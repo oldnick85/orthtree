@@ -37,6 +37,8 @@ class Tree
      */
     Tree(const Box_t& area) : m_root(area, 1) {}
 
+    void Clear() { m_root.Clear(); }
+
     /**
      * @brief Check in tree contains value
      * 
@@ -73,6 +75,23 @@ class Tree
         ORTHTREE_DEBUG_ASSERT(!m_all_values.contains(val), "Already have value");
         m_root.Add(val, box);
         m_all_values.emplace(val, box);
+    }
+
+    /**
+     * @brief Change value
+     * 
+     * @param val - value to add
+     * @param box - new corresponding box
+     * 
+     * @details val MUST have been added previously and box MUST be inside tree area
+     */
+    void Change(TValue val, const Box_t& box)
+    {
+        ORTHTREE_DEBUG_ASSERT(area().Contain(box), "Out of area");
+        ORTHTREE_DEBUG_ASSERT(m_all_values.contains(val), "No such value");
+        // TODO: optimize box change - affect only necessary nodes
+        Del(val);
+        Add(val, box);
     }
 
     /**
