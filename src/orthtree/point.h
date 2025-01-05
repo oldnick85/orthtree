@@ -4,6 +4,8 @@
 
 #include <array>
 #include <concepts>
+#include <string>
+#include <vector>
 
 #include "./common.h"
 #include "./vector.h"
