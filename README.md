@@ -1,47 +1,173 @@
-# ORTHTREE
+# 🌳 ORTHTREE - Orthogonal Tree Library
 
-## Description
+## 📖 Description
 
-This project is a header-only library for working with orthtrees.
+This project is a header-only C++23 library for working with orthtrees - a powerful spatial indexing data structure that generalizes quadtrees and octrees to arbitrary dimensions!
 
-From [here](https://doc.cgal.org/latest/Orthtree/index.html):
+🎯 Orthtrees Defined: From [CGAL](https://doc.cgal.org/latest/Orthtree/index.html) documentation:
 
 > Quadtrees are tree data structures in which each node encloses a rectangular section of space, and each internal node has exactly 4 children. Octrees are a similar data structure in 3D in which each node encloses a rectangular cuboid section of space, and each internal node has exactly 8 children.
 
 > We call the generalization of such data structure "orthtrees", as orthants are generalizations of quadrants and octants. The term "hyperoctree" can also be found in literature to name such data structures in dimensions 4 and higher.
 
-## Documentation
+## ✨ Key Features
 
-### Sample usage
+ - 🚀 Header-only - Just include and use!
+ - 📏 N-dimensional - Works in 1D, 2D, 3D, and beyond
+ - ⚡ High Performance - Efficient spatial queries and operations
+ - 🛡️ Type Safe - Built with C++ concepts and templates
+ - 🔧 Configurable - Customize node capacity, coordinate types, and sharing behavior
+ - 🐛 Debug Friendly - Extensive assertions for development
+ - 📊 Traversal Support - Iterate through tree structure for visualization or analysis
 
-First of all include header with necessary code:
+## 🚀 Quick Start
+
+### Installation
+
+Since this is a header-only library, simply copy the headers to your project or include the directory in your build system.
+
+### Basic Usage
+
 ```cpp
 #include <orthtree.h>
+
+int main() {
+    // Define a 2D tree with float coordinates storing integer values
+    using Tree_t = orthtree::Tree<int, float, 2>;
+    using Box_t = Tree_t::Box_t;
+    
+    // Create a tree covering rectangle: (-5,-6) to (11,7)
+    Tree_t tree{Box_t{{-5.0, -6.0}, {11.0, 7.0}}};
+    
+    // Add objects with their bounding boxes
+    tree.Add(1, Box_t{{1.0, 1.0}, {2.0, 2.0}});   // Object 1
+    tree.Add(2, Box_t{{10.0, 10.0}, {20.0, 20.0}}); // Object 2
+    tree.Add(3, Box_t{{0.5, 0.5}, {1.5, 1.5}});   // Overlapping with object 1
+    
+    // Find all intersections with a query box
+    auto box_intersections = tree.FindIntersected(Box_t{{-10.0, -1.0}, {1.0, 10.0}});
+    
+    // Find all pairwise intersections in the tree
+    auto all_intersections = tree.FindIntersected();
+    
+    // Check if an object exists
+    if (tree.Contains(1)) {
+        // Get its bounding box
+        auto box = tree.GetBox(1);
+    }
+    
+    // Remove an object
+    tree.Del(2);
+    
+    return 0;
+}
 ```
-next, we will make several types aliases for convenience's sake:
+
+## 🔧 Build Configuration
+
+### Debug Assertions
+
+The library includes runtime debug assertions that can be controlled:
+
+| Configuration         | Behavior                       |
+|-----------------------|--------------------------------|
+| Default debug build   | Assertions enabled             |
+| Default release build | Assertions disabled            |
+| Custom override       | Define `ORTHTREE_DEBUG_CHECKS` |
+
+Example: Force enable in release:
+
 ```cpp
-using Tree_t = Tree<int, float, 2>;
-using Box_t  = Tree_t::Box_t;
+#define ORTHTREE_DEBUG_CHECKS 1
+#include <orthtree.h>
 ```
-here we make type of tree that will store integers in 2-dimensional space with float coordinates. 
-Let's make the tree spanning on rectangle with vertices (-5,-6), (-5, 7), (11, 7) and (11, -6):
+
+Using CMake:
+
+```cmake
+target_compile_definitions(myapp PRIVATE ORTHTREE_DEBUG_CHECKS=1)
+```
+
+## 🔧 Advanced Configuration
+
+### Template Parameters
+
 ```cpp
-Tree_t tree{Box_t{{-5.0, -6.0}, {11.0, 7.0}}};
+// Full control over tree behavior:
+orthtree::Tree<
+    ObjectType,     // 🔸 Type of objects to store (must be hashable)
+    float,          // 🔸 Coordinate type (float, double, etc.)
+    3,              // 🔸 Dimensions (2 for quadtree, 3 for octree, etc.)
+    16,             // 🔸 Max objects per node before splitting
+    false           // 🔸 Allow objects to belong to multiple nodes (experimental)
+> tree(bounding_box);
+
+Working with Custom Types
+cpp
+
+struct GameObject {
+    int id;
+    std::string name;
+    // ... other fields
+};
+
+// Provide hash and equality for custom types
+namespace std {
+    template<> struct hash<GameObject> {
+        size_t operator()(const GameObject& obj) const {
+            return hash<int>()(obj.id);
+        }
+    };
+}
+
+// Create tree for custom type
+using GameTree = orthtree::Tree<GameObject, float, 2>;
 ```
-Now we can add values like that:
-```cpp
-tree.Add(1, Box_t{{1.0, 1.0}, {2.0, 2.0}});
-tree.Add(2, Box_t{{10.0, 10.0}, {20.0, 20.0}});
-```
-And then find intersections with box
-```cpp
-const auto inters_box = tree.FindIntersected(Box_t{{-10.0, -1.0}, {1.0, 10.0}});
-```
-or find pairwise intersections
-```cpp
-const auto inters = tree.FindIntersected();
-```
-Sure we can delete values:
-```cpp
-tree.Del(1);
-```
+
+## 📊 API Reference
+
+### Core Operations
+
+| Method             | Description                    | Complexity |
+|--------------------|--------------------------------|------------|
+| Add(value, box)    | Insert value with bounding box | O(log N)   |
+| Del(value)         | Remove value from tree         | O(log N)   |
+| Change(value, box) | Update value's bounding box    | O(log N)   |
+| Contains(value)    | Check if value exists          | O(1)       |
+| GetBox(value)      | Get value's bounding box       | O(1)       |
+
+### Query Operations
+
+| Method                 | Description                        | Use Case            |
+|------------------------|------------------------------------|---------------------|
+| FindIntersected()      | All intersecting pairs             | Collision detection |
+| FindIntersected(box)   | Values intersecting query box      | Range queries       |
+| FindIntersected(value) | Values intersecting specific value | Proximity detection |
+
+## 🎮 Real-World Applications
+
+ - 🎯 Collision Detection in Games
+ - 🗺️ Geographic Information Systems
+ - 🔬 Scientific Computing
+
+## 🔮 Future Roadmap
+
+ - ⚡ Optimized Change() operation to avoid remove/add
+ - 📦 Serialization/deserialization support
+ - 🧵 Thread-safe operations
+ - 📈 Statistics collection (tree depth, balance, etc.)
+
+
+## 🤝 Contributing
+
+We welcome contributions! Please:
+
+ - 🍴 Fork the repository
+ - 🌿 Create a feature branch
+ - ✅ Add tests for new functionality
+ - 📝 Update documentation
+ - 🔧 Submit a pull request
+
+## 📄 License
+
+MIT License - see LICENSE file for details.
