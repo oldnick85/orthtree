@@ -26,6 +26,6 @@ message(${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy;--config-file=${CMAKE_CURRENT_SOURCE_DIR}/.clang-tidy")
 
 add_subdirectory(src)
-add_subdirectory(test)
+add_subdirectory(tests)
 add_subdirectory(examples)
 add_subdirectory(doc)

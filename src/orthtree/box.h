@@ -64,6 +64,34 @@ class Box
     explicit Box(Point_t&& pnt) noexcept : m_pnt_min(std::move(pnt)), m_pnt_max(m_pnt_min) {}
 
     /**
+     * @brief Equality operator for boxes
+     * @param other The box to compare with
+     * @return true if both boxes have exactly the same minimum and maximum points,
+     *         false otherwise
+     * 
+     * @note Performs exact floating-point comparison. For floating-point types,
+     *       boxes created from the same input points will be equal, but boxes
+     *       created through different computational paths may not compare equal
+     *       due to floating-point rounding errors.
+     */
+    bool operator==(const Box<TCoord, DIM>& other) const
+    {
+        return (m_pnt_min == other.m_pnt_min) && (m_pnt_max == other.m_pnt_max);
+    }
+
+    /**
+     * @brief Inequality operator for boxes
+     * @param other The box to compare with
+     * @return true if boxes differ in either minimum or maximum point,
+     *         false if boxes are equal
+     * 
+     * @note This is the logical negation of the equality operator.
+     *       For floating-point types, use with caution due to potential
+     *       rounding errors in comparisons.
+     */
+    bool operator!=(const Box<TCoord, DIM>& other) const { return !(*this == other); }
+
+    /**
      * @brief Gets the minimum corner point of the box
      * @return Const reference to the minimum point
      */

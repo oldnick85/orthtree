@@ -63,7 +63,11 @@ class Tree
      * 
      * @post The tree contains no values and consists only of the root node
      */
-    void Clear() { m_root.Clear(); }
+    void Clear()
+    {
+        m_root.Clear();
+        m_all_values.clear();
+    }
 
     /**
      * @brief Checks if a value exists in the tree
@@ -107,7 +111,14 @@ class Tree
      */
     void Add(TValue val, const Box_t& box)
     {
-        ORTHTREE_DEBUG_ASSERT(area().Contain(box), "Out of area");
+        if (NODES_SHARE_VAL)
+        {
+            ORTHTREE_DEBUG_ASSERT(area().Intersect(box), "Out of area");
+        }
+        else
+        {
+            ORTHTREE_DEBUG_ASSERT(area().ContainStrict(box), "Out of area");
+        }
         ORTHTREE_DEBUG_ASSERT(!m_all_values.contains(val), "Already have value");
         m_root.Add(val, box);
         m_all_values.emplace(val, box);
