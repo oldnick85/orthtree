@@ -63,6 +63,35 @@ int main() {
 }
 ```
 
+## 📸 Working Examples
+
+A working example can be found in the _examples_ directory.
+
+### gui_sandbox_2d
+
+<div align="center">
+  <img src="doc/images/screenshot_gui_snadbox_2d_1.png" alt="Example Interface Demonstration" width="800"/>
+  <br>
+  <em>Graphical interface for 2D orthtree visualization with interactive control</em>
+</div>
+
+📋 Interface Capabilities
+
+- ✅ Interactive object addition/removal
+- ✅ Spatial partitioning structure visualization
+- ✅ Object and section tracking under cursor
+- ✅ Real-time parameter adjustment
+- ✅ Automatic tree updates
+
+🎮 Controls
+
+| Action       | Result             |
+|--------------|--------------------|
+| Left Click   | Add object         |
+| Right Click  | Remove object      |
+| Slider       | Change object size |
+| Clear Button | Clear entire tree  |
+
 ## 🔧 Build Configuration
 
 ### Debug Assertions
