@@ -105,10 +105,10 @@ class Box
 
     /**
      * @brief Calculates the midpoint coordinate along a specific dimension
-     * @param x Dimension index (0-based)
+     * @param coord_index Dimension index (0-based)
      * @return Midpoint coordinate along the specified dimension
      */
-    TCoord PntMid(std::size_t x) const { return Point_t::Mid(m_pnt_min, m_pnt_max, x); };
+    TCoord PntMid(std::size_t coord_index) const { return Point_t::Mid(m_pnt_min, m_pnt_max, coord_index); };
 
     /**
      * @brief Gets the maximum corner point of the box

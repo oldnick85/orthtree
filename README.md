@@ -117,6 +117,37 @@ Using CMake:
 target_compile_definitions(myapp PRIVATE ORTHTREE_DEBUG_CHECKS=1)
 ```
 
+## 🐋 Docker Compose Development Workflow
+
+### 📋 Overview
+
+This project uses Docker Compose to provide a consistent development environment for building, testing, and analyzing the C++ codebase. 
+All development tasks can be performed through standardized Docker commands, ensuring consistent results across different machines.
+
+**⚠️ Important Warning! Always execute commands from the project's root directory to ensure proper path resolution.**
+
+### 🚀 Available Commands
+
+🔨 Build the Project
+```bash
+docker compose -f scripts/docker/docker-compose.yml run --rm orthtree-linux-build
+```
+
+🧪 Run Tests
+```bash
+docker compose -f scripts/docker/docker-compose.yml run --rm orthtree-linux-test
+```
+
+🎨 Check Code Formatting
+```bash
+docker compose -f scripts/docker/docker-compose.yml run --rm orthtree-linux-format
+```
+
+🔍 Static Code Analysis
+```bash
+docker compose -f scripts/docker/docker-compose.yml run --rm orthtree-linux-tidy
+```
+
 ## 🔧 Advanced Configuration
 
 ### Template Parameters

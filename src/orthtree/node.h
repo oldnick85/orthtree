@@ -5,6 +5,7 @@
 #include <array>
 #include <concepts>
 #include <functional>
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -20,7 +21,7 @@ namespace orthtree
  * In a binary space partitioning scheme, each dimension can be divided into
  * two halves: Low (lower half) and High (upper half).
  */
-enum SectionOrthant
+enum SectionOrthant : uint8_t
 {
     Low  = 0, /**< Lower half of the bisected dimension */
     High = 1, /**< Upper half of the bisected dimension */
@@ -293,7 +294,7 @@ class BiSection<TValue, TNode, TCoord, DIM, 1>
  * @tparam GROUP_COUNT Maximum number of elements in a node before subdivision
  * @tparam NODES_SHARE_VAL Whether boxes can be shared between nodes
  */
-template <typename TValue, typename TCoord = float, std::size_t DIM = 2, std::size_t GROUP_COUNT = 10,
+template <typename TValue, typename TCoord = float, std::size_t DIM = 2, std::size_t GROUP_COUNT = GROUP_COUNT_DEFAULT,
           bool NODES_SHARE_VAL = false>
     requires std::floating_point<TCoord> && (DIM > 0) && (GROUP_COUNT > 0)
 class Node
@@ -338,14 +339,16 @@ class Node
     void Add(TValue val, const Box_t& box)
     {
         // Validate box is within node area based on mode
-        if (NODES_SHARE_VAL)
+#ifdef ORTHTREE_DEBUG_CHECKS
+        if (NODES_SHARE_VAL)  // NOLINT(bugprone-branch-clone)
         {
             ORTHTREE_DEBUG_ASSERT(m_area.Intersect(box), "Out of area");
         }
         else
         {
-            ORTHTREE_DEBUG_ASSERT(m_area.ContainStrict(box), "Out of area");
+            ORTHTREE_DEBUG_ASSERT(m_area.ContainStrict(box), "Not contains in area");
         }
+#endif
 
         // Check if we should store in this node or subdivide
         if ((!CanFallDeeper(box)) or ((m_bucket.size() < GROUP_COUNT) and (m_sub_nodes == nullptr)))

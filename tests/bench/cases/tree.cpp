@@ -52,7 +52,7 @@ void TreeIntersectPairsRandom3D_Fog()
     using Point_t               = Box_t::Point_t;
     Tree_t tree{Box_t{{0.0, 0.0, 0.0}, {area_sz, area_sz, area_sz}}};
 
-    GenerateRandomBoxes<Tree_t, Box_t, Point_t, float, 3>(COUNT, tree, 0.0, area_sz, 0.01, 0.01);
+    GenerateRandomBoxes<Tree_t, Box_t, Point_t, float, 3>(COUNT, tree, 0.0, area_sz, 0.01f, 0.01f);
     const auto start{std::chrono::steady_clock::now()};
     const auto tree_inters = tree.FindIntersected();
     const auto end{std::chrono::steady_clock::now()};

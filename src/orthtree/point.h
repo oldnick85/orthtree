@@ -4,6 +4,7 @@
 
 #include <array>
 #include <concepts>
+#include <format>
 #include <span>
 #include <string>
 #include <vector>
@@ -82,7 +83,7 @@ class Point
     /**
      * @brief Returns a string representation of the point.
      * 
-     * @return std::string String in format "(x; y; ...)".
+     * @return std::string String in format "(coord_index; y; ...)".
      */
     std::string Str() const
     {
@@ -140,7 +141,7 @@ class Point
      * @param rhs Point to move from.
      * @return Point<TCoord, DIM>& Reference to this point.
      */
-    Point<TCoord, DIM>& operator=(Point<TCoord, DIM>&& rhs)
+    Point<TCoord, DIM>& operator=(Point<TCoord, DIM>&& rhs) noexcept
     {
         m_coord = std::move(rhs.m_coord);
         return *this;
@@ -278,15 +279,15 @@ class Point
      * 
      * @param pnt1 First point.
      * @param pnt2 Second point.
-     * @param x Axis index (0-based).
-     * @return TCoord Midpoint coordinate along axis x.
+     * @param coord_index Axis index (0-based).
+     * @return TCoord Midpoint coordinate along axis coord_index.
      * 
-     * @note In debug builds, asserts that x < DIM.
+     * @note In debug builds, asserts that coord_index < DIM.
      */
-    static TCoord Mid(const Point<TCoord, DIM>& pnt1, const Point<TCoord, DIM>& pnt2, std::size_t x)
+    static TCoord Mid(const Point<TCoord, DIM>& pnt1, const Point<TCoord, DIM>& pnt2, std::size_t coord_index)
     {
-        ORTHTREE_DEBUG_ASSERT(x < DIM, "Invalid dimension");
-        return (pnt1[x] + pnt2[x]) / 2;
+        ORTHTREE_DEBUG_ASSERT(coord_index < DIM, "Invalid dimension");
+        return (pnt1[coord_index] + pnt2[coord_index]) / 2;
     }
 
     /**

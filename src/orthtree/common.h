@@ -32,7 +32,8 @@
 #endif
 #endif
 
-#if ORTHTREE_DEBUG_CHECKS
+#ifdef ORTHTREE_DEBUG_CHECKS
+
 #include <cassert>
 #include <stdexcept>
 #include <string>
@@ -58,7 +59,7 @@
      * ORTHTREE_DEBUG_ASSERT(index < size(), "Index out of bounds");
      * @endcode
      */
-#define ORTHTREE_DEBUG_ASSERT(exp, msg) assert(((void)msg, (exp)))
+#define ORTHTREE_DEBUG_ASSERT(exp, msg) assert(((void)(msg), (exp)))
 
 #else
 /**
@@ -71,3 +72,10 @@
 #define ORTHTREE_DEBUG_ASSERT(exp, msg) ((void)0)
 
 #endif
+
+namespace orthtree
+{
+
+constexpr std::size_t GROUP_COUNT_DEFAULT = 10;
+
+}  // namespace orthtree

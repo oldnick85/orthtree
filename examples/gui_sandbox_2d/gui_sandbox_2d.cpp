@@ -66,8 +66,8 @@ class TreeArea : public Gtk::DrawingArea
      */
     TreeArea()
     {
-        set_content_width(area_sz);
-        set_content_height(area_sz);
+        set_content_width(static_cast<int>(area_sz));
+        set_content_height(static_cast<int>(area_sz));
 
         set_draw_func(sigc::mem_fun(*this, &TreeArea::on_draw));
         m_area_click = Gtk::GestureClick::create();
@@ -148,7 +148,7 @@ class TreeArea : public Gtk::DrawingArea
     {
         Box_t box{{c_x - m_box_sz, c_y - m_box_sz}, {c_x + m_box_sz, c_y + m_box_sz}};
 
-        for (int i = 0; i < 2; ++i)
+        for (std::size_t i = 0; i < Tree_t::Dim(); ++i)
         {
             if ((box.PntMin()[i] < 0.0) or (box.PntMin()[i] > area_sz))
             {
@@ -377,7 +377,7 @@ class MainWindow : public Gtk::Window
         m_left_panel.append(m_area);
 
         // Add help label and clear button to left panel
-        m_lbl_help.set_size_request(area_sz, lbl_help_size_request);
+        m_lbl_help.set_size_request(static_cast<int>(area_sz), lbl_help_size_request);
         m_lbl_help.set_text("Left click - add box | Right click - delete box");
         m_lbl_help.set_margin_top(lbl_help_margin_top);
         m_left_panel.append(m_lbl_help);

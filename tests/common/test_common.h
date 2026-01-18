@@ -20,7 +20,9 @@ void GenerateRandomBoxes(const std::size_t count, Tree_t& tree, float area_min, 
     {
         std::vector<TCoord> coords_min;
         std::vector<TCoord> coords_max;
-        for (std::size_t i = 0; i < DIM; ++i)
+        coords_min.reserve(DIM);
+        coords_max.reserve(DIM);
+        for (std::size_t j = 0; j < DIM; ++j)
         {
             const auto sz = box_sz_min == box_sz_max ? box_sz_min : dis_sz(gen);
             std::uniform_real_distribution<float> dis_pos(area_min, area_max - sz);
@@ -43,13 +45,15 @@ void AddRandomBox(const std::size_t id, Tree_t& tree, float area_min, float area
 
     std::vector<TCoord> coords_min;
     std::vector<TCoord> coords_max;
+    coords_min.resize(DIM);
+    coords_max.resize(DIM);
     for (std::size_t i = 0; i < DIM; ++i)
     {
         const auto sz = dis_sz(gen);
         std::uniform_real_distribution<float> dis_pos(area_min, area_max - sz);
         const auto pos = dis_pos(gen);
-        coords_min.push_back(pos);
-        coords_max.push_back(pos + sz);
+        coords_min[i]  = pos;
+        coords_max[i]  = pos + sz;
     }
     tree.Add(id, Box_t{Point_t{coords_min}, Point_t{coords_max}});
 }

@@ -37,7 +37,7 @@ namespace orthtree
  * auto intersections = tree.FindIntersected();
  * @endcode
  */
-template <typename TValue, typename TCoord = float, std::size_t DIM = 2, std::size_t GROUP_COUNT = 10,
+template <typename TValue, typename TCoord = float, std::size_t DIM = 2, std::size_t GROUP_COUNT = GROUP_COUNT_DEFAULT,
           bool NODES_SHARE_VAL = false>
     requires std::floating_point<TCoord> && (DIM > 0) && (GROUP_COUNT > 0)
 class Tree
@@ -48,6 +48,8 @@ class Tree
 
     /// Type alias for tree nodes
     using Node_t = Node<TValue, TCoord, DIM, GROUP_COUNT, NODES_SHARE_VAL>;
+
+    constexpr static std::size_t Dim() { return DIM; }
 
     /**
      * @brief Constructs a new orthogonal tree covering the specified spatial region
@@ -111,14 +113,16 @@ class Tree
      */
     void Add(TValue val, const Box_t& box)
     {
-        if (NODES_SHARE_VAL)
+#ifdef ORTHTREE_DEBUG_CHECKS
+        if (NODES_SHARE_VAL)  // NOLINT(bugprone-branch-clone)
         {
             ORTHTREE_DEBUG_ASSERT(area().Intersect(box), "Out of area");
         }
         else
         {
-            ORTHTREE_DEBUG_ASSERT(area().ContainStrict(box), "Out of area");
+            ORTHTREE_DEBUG_ASSERT(area().ContainStrict(box), "Not contains in area");
         }
+#endif
         ORTHTREE_DEBUG_ASSERT(!m_all_values.contains(val), "Already have value");
         m_root.Add(val, box);
         m_all_values.emplace(val, box);

@@ -5,6 +5,7 @@
 #include <array>
 #include <cmath>
 #include <concepts>
+#include <span>
 
 #include "./common.h"
 
