@@ -1,5 +1,5 @@
 .vscode
-/build
+/build*
 /external
 /out
 settings.json

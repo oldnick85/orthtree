@@ -1,0 +1,41 @@
+services:
+  # Linux build and test services
+  orthtree-linux-build:
+    build:
+      context: ../../
+      dockerfile: scripts/docker/linux/Dockerfile
+    volumes:
+      - ../../.:/workspace
+    command: [ "build", "Release", "build-linux" ]
+
+  orthtree-linux-test:
+    build:
+      context: ../../
+      dockerfile: scripts/docker/linux/Dockerfile
+    volumes:
+      - ../../.:/workspace
+    command: [ "test", "Release", "build-linux" ]
+
+  orthtree-linux-format:
+    build:
+      context: ../../
+      dockerfile: scripts/docker/linux/Dockerfile
+    volumes:
+      - ../../.:/workspace
+    command: [ "format" ]
+
+  orthtree-linux-tidy:
+    build:
+      context: ../../
+      dockerfile: scripts/docker/linux/Dockerfile
+    volumes:
+      - ../../.:/workspace
+    command: [ "tidy" ]
+
+  orthtree-linux-all:
+    build:
+      context: ../../
+      dockerfile: scripts/docker/linux/Dockerfile
+    volumes:
+      - .:/workspace
+    command: [ "all", "Release", "build-linux" ]
